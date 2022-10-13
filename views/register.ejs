@@ -7,6 +7,12 @@
     <title>Document</title>
 </head>
 <body>
+    <% if (errors){%> 
+		<% errors = errors.split(',') %> 
+		<% errors.forEach (el => { %>
+        <p style="color: red;"><%= el %> </p>
+    <% }) %> 
+	<% } %>
     <form action="/register" method="post">
         Username :
         <input type="text" name="userName" id=""><br><br>

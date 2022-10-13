@@ -12,10 +12,21 @@
     <h2>Your Profile Detail</h2>
     Username : <%= data.userName %> <br><br>
     Email : <%= data.email %> <br>
-    <p>Your Location : <%= `${location.city}, ${location.zip_code}, ${location.country_name}` %> </p> <br>
+    <p>Your Location : <%= `${location.city}, ${location.country_name}` %> </p> <br>
     
 
-    <form action="/<%= data.id %> " method="post">
+    <% if(!data.UserDetail) { %>
+        <form action="/<%= data.id %>/generateDetail" method="post">
+            <button type="submit">Generate Profile Detail</button>
+        </form>
+    <% } else { %>
+        <% if (errors){%> 
+            <% errors = errors.split(',') %> 
+            <% errors.forEach (el => { %>
+            <p style="color: red;"><%= el %> </p>
+        <% }) %> 
+        <% } %>
+        <form action="/<%= data.id %>" method="post">
         Favorite catchphrase
         <input type="text" name="catchphrase" id="" value="<%= data.UserDetail.catchphrase %> "><br><br>
         Gender
@@ -26,5 +37,6 @@
 
         <button type="submit">Edit</button>
     </form>
+    <% } %> 
 </body>
 </html>

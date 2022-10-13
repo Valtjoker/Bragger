@@ -8,7 +8,12 @@
 </head>
 <body>
     <h1>add post!</h1>
-
+    <% if (errors){%> 
+		<% errors = errors.split(',') %> 
+		<% errors.forEach (el => { %>
+        <p style="color: red;"><%= el %> </p>
+    <% }) %> 
+	<% } %>
     <form method="post">
         <label for="">Title</label><input type="text" name="title">
         <label for="">content Url</label><input type="text" name="contentURL">

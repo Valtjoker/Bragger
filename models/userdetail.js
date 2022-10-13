@@ -15,9 +15,24 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserDetail.init({
-    gender: DataTypes.STRING,
-    catchphrase: DataTypes.STRING,
-    description: DataTypes.TEXT
+    gender: {
+      type : DataTypes.STRING,
+      validate: {
+        notEmpty: { msg: 'gender cant be Empty' },
+      }
+    },
+    catchphrase: { 
+      type : DataTypes.STRING,
+      validate: {
+        notEmpty: { msg: 'catchphrase cant be Empty' },
+      }
+    },
+    description: {
+      type : DataTypes.TEXT,
+      validate: {
+        notEmpty: { msg: 'description cant be Empty' },
+      }
+    }
   }, {
     sequelize,
     modelName: 'UserDetail',

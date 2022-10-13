@@ -45,7 +45,8 @@ class Controller {
 
     // ! Done
     static displayRegisterForm(req, res) {
-        res.render('register')
+        let errors = req.query.error
+        res.render('register', {errors})
     }
 
     // ! Done
@@ -57,8 +58,12 @@ class Controller {
                 res.redirect('/login')
             })
             .catch((err) => {
-                console.log(err);
-                res.send(err)
+                // console.log(err);
+                if (err.name == "SequelizeValidationError") {
+                    err = err.errors.map(el => el.message)
+                }
+                res.redirect(`/register?error=${err}`)
+                // res.send(err)
             })
     }
 
@@ -117,9 +122,11 @@ class Controller {
 
     // ! Undone
     static addPostForm(req, res) {
+        console.log(req.query);
+        let errors = req.query.error
         const {userId} = req.params
         User.findOne({where:{id:userId}})
-        .then((data)=>{res.render('add', {data})})
+        .then((data)=>{res.render('add', {data, errors})})
         .catch(err=>{res.send(err)})
     }
 
@@ -142,6 +149,7 @@ class Controller {
         })
         Post.create({title, contentURL, description})
         .then((data)=>{
+            console.log(tags);
             if(tags.length > 0){
                 tags.forEach(e=>{
                     Post_Tag.create({PostId:data.id, TagId:e.id, UserId:userId})
@@ -149,12 +157,21 @@ class Controller {
             }
         })
         .then(()=>{
-            res.redirect("/")
+            res.redirect("/home")
+        })
+        .catch((err) => {
+            if (err.name == "SequelizeValidationError") {
+                err = err.errors.map(el => el.message)
+            }
+            // res.send(err)
+            res.redirect(`/add/${userId}?error=${err}`)
         })
     }
     
     // ! Done
     static displayProfile(req, result) {
+        // console.log(req.query);
+        let errors = req.query.error
         const { userId, userName, userIp} = req.session
         // console.log(req.params);
         // const { userId } = req.params
@@ -170,7 +187,8 @@ class Controller {
             ip2location.fetch(userIp).then(location => {
                 // return res
                 // console.log(location.country_name);
-                result.render('profile', {data, userIp, location, userId})
+                // result.send(data)
+                result.render('profile', {data, userIp, location, userId, errors})
             });
         })
         .catch((err) => {
@@ -182,10 +200,40 @@ class Controller {
     static editProfile(req, res) {
         const {userId} = req.session
         const {gender, catchphrase, description} = req.body
-        UserDetail.update({gender:gender, catchphrase:catchphrase, description:description}, {where:{UserId:userId}})
+        UserDetail.update(
+            {
+                gender, catchphrase, description, UserId : userId}, 
+            {
+                where:
+                {
+                    UserId:userId
+                }
+        })
         .then((data)=>{res.redirect(`/${userId}`)})
-        .catch(err=>{res.send(err)})
+        .catch(err=>{
+            if (err.name == "SequelizeValidationError") {
+                err = err.errors.map(el => el.message)
+            }
+            res.redirect(`/${userId}?error=${err}`)
+            // res.send(err)
+        })
     }
+
+    // static addDetailProfile(req, res) {
+    //     const {userId} = req.session
+    //     const {gender, catchphrase, description} = req.body
+    //     UserDetail.create(
+    //         {
+    //             gender, catchphrase, description, UserId : userId}, 
+    //         {
+    //             where:
+    //             {
+    //                 UserId:userId
+    //             }
+    //     })
+    //     .then((data)=>{res.redirect(`/${userId}`)})
+    //     .catch(err=>{res.send(err)})
+    // }
 
     // ! Done
     static deletePost(req, res) {
