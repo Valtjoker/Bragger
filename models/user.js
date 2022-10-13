@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcryptjs');
+const randomIpv4 = require('random-ipv4');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -23,5 +25,15 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
   });
+
+  User.beforeCreate((data) => {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(data.password, salt);
+    const randomIp = randomIpv4();
+
+    data.password = hash
+    data.ip = randomIp
+  })
+  
   return User;
 };
