@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/logout">Logout</a>
+    <a href="/home "><button>Home</button></a>
+    <h2>Your Profile Detail</h2>
+    Username : <%= data.userName %> <br><br>
+    Email : <%= data.email %> <br>
+    <p>Your Location : <%= `${location.city}, ${location.zip_code}, ${location.country_name}` %> </p> <br>
+    
+
+    <form action="/<%= data.id %> " method="post">
+        Favorite catchphrase
+        <input type="text" name="catchphrase" id="" value="<%= data.UserDetail.catchphrase %> "><br><br>
+        Gender
+        <input type="text" name="gender" id="" value="<%= data.UserDetail.gender %> "><br><br>
+        About you :
+        <br>
+        <textarea name="description" id="" cols="30" rows="10"><%= data.UserDetail.description %></textarea> <br> <br>
+
+        <button type="submit">Edit</button>
+    </form>
+</body>
+</html>
