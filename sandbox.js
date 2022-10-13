@@ -1,7 +1,5 @@
-const bcrypt = require('bcryptjs');
-const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync("admin", salt);
-    // const randomIp = randomIpv4();
-
-    // data.password = hash
-    console.log(hash);
+let url = "https://www.youtube.com/watch?v=AmYxRSC9zMY"
+    let convertedUrl = url.replace('watch?v=', 'embed/')
+    
+    let cv = convertedUrl
+    console.log(cv, "<<<<<<<<<<<<<<");
