@@ -55,6 +55,7 @@ class Controller {
             })
     }
 
+    // ! Done
     static displayHome(req, res) {
         // console.log(req.session.userId);
         const { userId, userName, userIp} = req.session
@@ -85,7 +86,7 @@ class Controller {
         // })
         .then((data) => {
             // console.log(userName);
-            res.render('home', {data, userName, userIp})
+            res.render('home', {data, userName, userIp, userId})
             // res.send(data)
         })
         .catch((err) => {
@@ -112,8 +113,32 @@ class Controller {
         res.render('home')
     }
 
+    // ! Done
     static deletePost(req, res) {
-        res.render('home')
+        const { userId, postId } = req.params
+        Post.destroy({
+            where : {
+                id : postId
+            }
+        })
+
+        .then((data) => {
+            return Post_Tag.destroy({
+                where : {
+                    UserId : userId,
+                    PostId : postId
+                }
+            })
+        })
+
+        .then((result) => {
+            res.redirect('/home')
+        })
+
+        .catch((err) => {
+            console.log(err);
+            res.send(err)
+        })
     }
 
 
