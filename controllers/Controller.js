@@ -1,5 +1,6 @@
 const { User, Post, Tag, Post_Tag } = require('../models/index')
 const bcrypt = require('bcryptjs');
+const filterTags = require('../helpers/filterTags')
 class Controller {
     static displayLoginForm(req, res) {
         // console.log(req.query);
@@ -56,7 +57,42 @@ class Controller {
     }
 
     static displayHome(req, res) {
-        res.render('home')
+        // console.log(req.session.userId);
+        const { userId, userName, userIp} = req.session
+        
+        Post.findAll({
+            // include: {
+            //     model: Post_Tag,
+            //     // where : {
+            //     //     UserId : userId
+            //     // },
+            //     model: Tag
+            // }
+            include: [{
+                model: Tag,
+                attributes: ['id', 'name']
+            },
+            {
+                model: Post_Tag,
+                where: {
+                    UserId : userId
+                },
+                attributes: ['comment', 'reaction', 'id']
+            }
+        ]
+        })
+        // Post_Tag.findAll({
+        //     include: Post
+        // })
+        .then((data) => {
+            // console.log(userName);
+            res.render('home', {data, userName, userIp, filterTags})
+            // res.send(data)
+        })
+        .catch((err) => {
+            console.log(err);
+            res.send(err)
+        })
     }
 
     static addPostForm(req, res) {

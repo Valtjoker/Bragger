@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Post.belongsToMany(models.Tag,{through:models.Post_Tag})
+      Post.hasMany(models.Post_Tag)
+      Post.belongsToMany(models.Tag, { 
+        foreignKey: "PostId",
+        through: "Post_Tag" 
+      })
     }
   }
   Post.init({
@@ -23,5 +27,12 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Post',
   });
+
+  Post.beforeCreate((data) => {
+    let url = data.contentURL
+    url.replace('watch?v=', 'embed/')
+
+    data.contentURL = url
+  })
   return Post;
 };

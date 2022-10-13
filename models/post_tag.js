@@ -12,9 +12,22 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Post_Tag.belongsTo(models.User)
+      Post_Tag.belongsTo(models.Tag)
+      Post_Tag.belongsTo(models.Tag, {
+        foreignKey: "TagId"
+      })
+      Post_Tag.belongsTo(models.Post, {
+        foreignKey: "PostId"
+      })
     }
   }
   Post_Tag.init({
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true
+    },
     comment: DataTypes.TEXT,
     reaction: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER,
