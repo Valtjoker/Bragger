@@ -1,4 +1,4 @@
-const { User } = require('../models/index')
+const { User, Post, Tag, Post_Tag } = require('../models/index')
 const bcrypt = require('bcryptjs');
 class Controller {
     static displayLoginForm(req, res) {
@@ -19,14 +19,15 @@ class Controller {
 
                     if (isValidPassword) {
                         req.session.userId = user.id
-
+                        req.session.userName = user.userName
+                        req.session.userIp = user.ip
                         return res.redirect('/home')
                     } else {
-                        const error = "Invalid userName/Password"
+                        const error = "Invalid username/Password"
                         return res.redirect(`/login?error=${error}`)
                     }
                 } else {
-                    const error = "Invalid userName/Password"
+                    const error = "Invalid username/Password"
                     return res.redirect(`/login?error=${error}`)
                 }
             })
@@ -57,6 +58,29 @@ class Controller {
     static displayHome(req, res) {
         res.render('home')
     }
+
+    static addPostForm(req, res) {
+        const {userId} = req.params
+        User.findOne({where:{id:userId}})
+        .then((data)=>{res.render('add', {data})})
+    }
+
+    static addPost(req, res) {
+        res.render('home')
+    }
+    
+    static displayProfile(req, res) {
+        res.render('home')
+    }
+
+    static editProfile(req, res) {
+        res.render('home')
+    }
+
+    static deletePost(req, res) {
+        res.render('home')
+    }
+
 
     static logoutHandler(req, res) {
         req.session.destroy((err) => {
