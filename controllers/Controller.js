@@ -1,12 +1,15 @@
 const { User, Post, Tag, Post_Tag } = require('../models/index')
 const bcrypt = require('bcryptjs');
+let ip2location = require('ip-to-location');
 class Controller {
+    // ! Done
     static displayLoginForm(req, res) {
         // console.log(req.query);
         let error = req.query.error
         res.render('login', { error })
     }
 
+    // ! Done
     static loginHandler(req, res) {
         const { userName, password } = req.body
 
@@ -38,10 +41,12 @@ class Controller {
             })
     }
 
+    // ! Done
     static displayRegisterForm(req, res) {
         res.render('register')
     }
 
+    // ! Done
     static registerHandler(req, res) {
         const { userName, email, password } = req.body
 
@@ -55,35 +60,25 @@ class Controller {
             })
     }
 
-    // ! Done
+    // ! Done (SHOW ALL POST FROM ALL USER) (UNCOMMENT WHERE JIKA MAU TAMPIL POST SPESIFIK USER ATAU USER YANG LOGIN)
     static displayHome(req, res) {
         // console.log(req.session.userId);
         const { userId, userName, userIp} = req.session
         
         Post.findAll({
-            // include: {
-            //     model: Post_Tag,
-            //     // where : {
-            //     //     UserId : userId
-            //     // },
-            //     model: Tag
-            // }
             include: [{
                 model: Tag,
                 attributes: ['id', 'name']
             },
             {
                 model: Post_Tag,
-                where: {
-                    UserId : userId
-                },
+                // where: {
+                //     UserId : userId
+                // },
                 attributes: ['comment', 'reaction', 'id']
             }
         ]
         })
-        // Post_Tag.findAll({
-        //     include: Post
-        // })
         .then((data) => {
             // console.log(userName);
             res.render('home', {data, userName, userIp, userId})
@@ -95,22 +90,39 @@ class Controller {
         })
     }
 
+    // ! Undone
     static addPostForm(req, res) {
         const {userId} = req.params
         User.findOne({where:{id:userId}})
         .then((data)=>{res.render('add', {data})})
     }
 
+    // ! Undone
     static addPost(req, res) {
         res.render('home')
     }
     
-    static displayProfile(req, res) {
-        res.render('home')
+    // ! Done
+    static displayProfile(req, result) {
+        const { userId, userName, userIp} = req.session
+        // console.log(req.params);
+        // const { userId } = req.params
+        User.findByPk(userId)
+        .then((data) => {
+            ip2location.fetch(userIp).then(location => {
+                // return res
+                // console.log(location.country_name);
+                result.render('profile', {data, userIp, location, userId})
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
     }
 
+    // ! Undone
     static editProfile(req, res) {
-        res.render('home')
+
     }
 
     // ! Done
@@ -141,7 +153,7 @@ class Controller {
         })
     }
 
-
+    // ! Done
     static logoutHandler(req, res) {
         req.session.destroy((err) => {
             if (err) {
