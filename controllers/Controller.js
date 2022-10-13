@@ -56,9 +56,44 @@ class Controller {
             })
     }
 
+    // ! Done
     static displayHome(req, res) {
-        let {userId, userName, userIp} = req.session
-        res.render('home',{userId, userName, userIp})
+        // console.log(req.session.userId);
+        const { userId, userName, userIp} = req.session
+        
+        Post.findAll({
+            // include: {
+            //     model: Post_Tag,
+            //     // where : {
+            //     //     UserId : userId
+            //     // },
+            //     model: Tag
+            // }
+            include: [{
+                model: Tag,
+                attributes: ['id', 'name']
+            },
+            {
+                model: Post_Tag,
+                where: {
+                    UserId : userId
+                },
+                attributes: ['comment', 'reaction', 'id']
+            }
+        ]
+        })
+        // Post_Tag.findAll({
+        //     include: Post
+        // })
+        .then((data) => {
+            // console.log(userName);
+            res.render('home', {data, userName, userIp, userId})
+            // res.send(data)
+        })
+        .catch((err) => {
+            console.log(err);
+            res.send(err)
+        })
     }
 
     static addPostForm(req, res) {
@@ -98,8 +133,32 @@ class Controller {
         res.render('home')
     }
 
+    // ! Done
     static deletePost(req, res) {
-        res.render('home')
+        const { userId, postId } = req.params
+        Post.destroy({
+            where : {
+                id : postId
+            }
+        })
+
+        .then((data) => {
+            return Post_Tag.destroy({
+                where : {
+                    UserId : userId,
+                    PostId : postId
+                }
+            })
+        })
+
+        .then((result) => {
+            res.redirect('/home')
+        })
+
+        .catch((err) => {
+            console.log(err);
+            res.send(err)
+        })
     }
 
 
