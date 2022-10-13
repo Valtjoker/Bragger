@@ -26,5 +26,13 @@ const isLoggedIn = function (req, res, next) {
 router.use(isLoggedIn)
 router.get('/home', Controller.displayHome)
 router.get('/logout', Controller.logoutHandler)
+router.get('/posts', Controller.displayHome)
+router.get('/add/:userId', Controller.addPostForm)
+router.post('/add/:userId', Controller.addPost)
+router.get('/:userId', Controller.displayProfile)
+router.post('/:userId', Controller.editProfile)
+router.get('/:userId/:postId/delete', Controller.deletePost)
+
+
 
 module.exports = router
