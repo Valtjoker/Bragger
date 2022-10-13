@@ -22,5 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'UserDetail',
   });
+  UserDetail.beforeCreate((data) => {
+    data.gender = "it's a secret.."
+    data.catchphrase = "i have no catchphrase :("
+    data.description = "hi"
+  })
   return UserDetail;
 };

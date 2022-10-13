@@ -1,4 +1,4 @@
-const { User, Post, Tag, Post_Tag } = require('../models/index')
+const { User, Post, Tag, Post_Tag, UserDetail } = require('../models/index')
 const bcrypt = require('bcryptjs');
 const { Op } = require("sequelize");
 const publishSince = require('../helpers/publishSince')
@@ -120,11 +120,37 @@ class Controller {
         const {userId} = req.params
         User.findOne({where:{id:userId}})
         .then((data)=>{res.render('add', {data})})
+        .catch(err=>{res.send(err)})
     }
 
     // ! Undone
     static addPost(req, res) {
-        res.render('home')
+        const {userId} = req.params
+        const{title,contentURL,description, tagNames} = req.body
+        let hashtags = tagNames.split(' ')
+        let tags = []
+
+        hashtags.forEach(e=>{
+            Tag.findOrCreate({
+               where:{
+                name: e
+               }
+            })
+            .then((data)=>{
+                tags.push(data[0])
+            })
+        })
+        Post.create({title, contentURL, description})
+        .then((data)=>{
+            if(tags.length > 0){
+                tags.forEach(e=>{
+                    Post_Tag.create({PostId:data.id, TagId:e.id, UserId:userId})
+                })
+            }
+        })
+        .then(()=>{
+            res.redirect("/")
+        })
     }
     
     // ! Done
@@ -132,7 +158,14 @@ class Controller {
         const { userId, userName, userIp} = req.session
         // console.log(req.params);
         // const { userId } = req.params
-        User.findByPk(userId)
+        User.findOne({
+            where:{
+                id:userId
+            },
+            include:{
+                model:UserDetail
+            }
+        })
         .then((data) => {
             ip2location.fetch(userIp).then(location => {
                 // return res
@@ -147,7 +180,11 @@ class Controller {
 
     // ! Undone
     static editProfile(req, res) {
-
+        const {userId} = req.session
+        const {gender, catchphrase, description} = req.body
+        UserDetail.update({gender:gender, catchphrase:catchphrase, description:description}, {where:{UserId:userId}})
+        .then((data)=>{res.redirect(`/${userId}`)})
+        .catch(err=>{res.send(err)})
     }
 
     // ! Done
