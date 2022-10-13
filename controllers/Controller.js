@@ -138,7 +138,7 @@ class Controller {
         const {userId} = req.params
         const{title,contentURL,description, tagNames} = req.body
         let hashtags = tagNames.split(' ')
-        let tags = []
+        let tags = [] 
 
         hashtags.forEach(e=>{
             Tag.findOrCreate({
