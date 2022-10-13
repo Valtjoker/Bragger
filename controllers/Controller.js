@@ -1,5 +1,6 @@
 const { User, Post, Tag, Post_Tag } = require('../models/index')
 const bcrypt = require('bcryptjs');
+const tag = require('../models/tag');
 class Controller {
     static displayLoginForm(req, res) {
         // console.log(req.query);
@@ -56,17 +57,37 @@ class Controller {
     }
 
     static displayHome(req, res) {
-        res.render('home')
+        let {userId, userName, userIp} = req.session
+        res.render('home',{userId, userName, userIp})
     }
 
     static addPostForm(req, res) {
         const {userId} = req.params
         User.findOne({where:{id:userId}})
         .then((data)=>{res.render('add', {data})})
+        .catch(err=>{res.send(err)})
     }
 
     static addPost(req, res) {
-        res.render('home')
+        const {userId} = req.params
+        const{title,contentURL,description, tagNames} = req.body
+        let tags = []
+        let hashtags = tagNames.split(' ')
+
+        hashtags.forEach(e=>{
+            Tag.findOrCreate({
+               where:{
+                name: e
+               }
+            })
+            .then((data)=>{
+                tags.push(data[0])
+            })
+        })
+        Post.create({title, contentURL, description})
+        .then((data)=>{
+            
+        })
     }
     
     static displayProfile(req, res) {
