@@ -9,5 +9,21 @@
 <body>
     <a href="/logout">Logout</a>
     <h1>Masuk</h1>
+
+    <% data.forEach((el) => { %>
+            <h2>Title : <%= el.title %></h2>
+            <% if (el.contentURL.slice(12, 19) == 'youtube') { %>
+                <iframe width="560" height="315" src="<%= el.contentURL %> " title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <% } else { %>
+                <img src="<%= el.contentURL %> " alt="">
+            <% } %>
+            <% el.Tags.forEach((el) => { %>
+                <p>Tags : <%= el.name %> </p>
+            <% }) %> 
+            <p>Description : <%= el.description %> </p>
+            <% el.Post_Tags.forEach((el) => { %>
+                <p>Comment : <%= el.comment %> </p>
+            <% }) %> 
+    <% }) %> 
 </body>
 </html>
