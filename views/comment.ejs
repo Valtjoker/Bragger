@@ -5,20 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
     <title>Document</title>
 </head>
 <body>
-    <% if(error) { %>
-        <p style="color: red;"><%= error %> </p>
-    <% } %> 
-    <form action="/login" method="post">
-        Username :
-        <input type="text" name="userName" id=""><br><br>
-        Password :
-        <input type="password" name="password" id=""><br><br>
-        <input type="submit" value="Login">
+    <h1>Comment!</h1>
+    <form action="" method="post">
+        <input type="text" name="comment">
+        <button type="submit">submit</button>
     </form>
-    <p>dont have an account?</p>
-    <a href="/register"><button>register</button></a>
 </body>
 </html>

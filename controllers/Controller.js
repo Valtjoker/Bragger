@@ -123,6 +123,22 @@ class Controller {
         })
     }
 
+    static commentForm(req,res){
+        let {PostId} = req.params
+        Post_Tag.findOne({where:{PostId}})
+        .then((data)=>{res.render('comment', {data})})
+        .catch(err=>{res.send(err)})
+    }
+
+    static commentPost(req, res){
+        let {PostId} = req.params
+        let {comment} = req.body
+        Post_Tag.findOne({where:{PostId}})
+        .then((data)=>{Post_Tag.create({PostId:data.PostId, TagId:data.TagId, UserId:data.UserId, comment})})
+        .then(()=>{res.redirect('/home')})
+        .catch(err=>{res.send(err)})
+    }
+
     // ! Undone
     static addPostForm(req, res) {
         console.log(req.query);
@@ -138,7 +154,7 @@ class Controller {
         const {userId} = req.params
         const{title,contentURL,description, tagNames} = req.body
         let hashtags = tagNames.split(' ')
-        let tags = [] 
+        let tags = []
 
         hashtags.forEach(e=>{
             Tag.findOrCreate({
