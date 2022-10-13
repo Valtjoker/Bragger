@@ -30,9 +30,9 @@ module.exports = (sequelize, DataTypes) => {
 
   Post.beforeCreate((data) => {
     let url = data.contentURL
-    url.replace('watch?v=', 'embed/')
-
-    data.contentURL = url
+    let convertedUrl = url.replace('watch?v=', 'embed/')
+    
+    data.contentURL = convertedUrl
   })
   return Post;
 };
