@@ -53,6 +53,9 @@ class Controller {
         const { userName, email, password } = req.body
 
         User.create({ userName, password, email })
+            .then((data)=>{
+                UserDetail.create({UserId:data.id})
+            })
             .then((data) => {
                 res.redirect('/login')
             })
