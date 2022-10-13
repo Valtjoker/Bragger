@@ -1,6 +1,5 @@
 const { User, Post, Tag, Post_Tag } = require('../models/index')
 const bcrypt = require('bcryptjs');
-const filterTags = require('../helpers/filterTags')
 class Controller {
     static displayLoginForm(req, res) {
         // console.log(req.query);
@@ -86,7 +85,7 @@ class Controller {
         // })
         .then((data) => {
             // console.log(userName);
-            res.render('home', {data, userName, userIp, filterTags})
+            res.render('home', {data, userName, userIp})
             // res.send(data)
         })
         .catch((err) => {
