@@ -9,7 +9,7 @@
 <body>
     <a href="/logout">Logout</a>
     <h1>Masuk</h1>
-
+<a href="/add/<%=userId%>"><button>ADD POST</button></a>
     <% data.forEach((el) => { %>
             <h2>Title : <%= el.title %></h2>
             <% if (el.contentURL.slice(12, 19) == 'youtube') { %>

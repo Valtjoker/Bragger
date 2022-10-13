@@ -1,6 +1,5 @@
 const { User, Post, Tag, Post_Tag } = require('../models/index')
 const bcrypt = require('bcryptjs');
-const tag = require('../models/tag');
 class Controller {
     static displayLoginForm(req, res) {
         // console.log(req.query);
@@ -75,9 +74,6 @@ class Controller {
             },
             {
                 model: Post_Tag,
-                where: {
-                    UserId : userId
-                },
                 attributes: ['comment', 'reaction', 'id']
             }
         ]
@@ -106,8 +102,8 @@ class Controller {
     static addPost(req, res) {
         const {userId} = req.params
         const{title,contentURL,description, tagNames} = req.body
-        let tags = []
         let hashtags = tagNames.split(' ')
+        let tags = []
 
         hashtags.forEach(e=>{
             Tag.findOrCreate({
@@ -121,7 +117,14 @@ class Controller {
         })
         Post.create({title, contentURL, description})
         .then((data)=>{
-            
+            if(tags.length > 0){
+                tags.forEach(e=>{
+                    Post_Tag.create({PostId:data.id, TagId:e.id, UserId:userId})
+                })
+            }
+        })
+        .then(()=>{
+            res.redirect("/")
         })
     }
     
