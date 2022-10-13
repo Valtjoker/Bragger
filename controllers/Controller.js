@@ -1,5 +1,7 @@
 const { User, Post, Tag, Post_Tag } = require('../models/index')
 const bcrypt = require('bcryptjs');
+const { Op } = require("sequelize");
+const publishSince = require('../helpers/publishSince')
 let ip2location = require('ip-to-location');
 class Controller {
     // ! Done
@@ -63,9 +65,9 @@ class Controller {
     // ! Done (SHOW ALL POST FROM ALL USER) (UNCOMMENT WHERE JIKA MAU TAMPIL POST SPESIFIK USER ATAU USER YANG LOGIN)
     static displayHome(req, res) {
         // console.log(req.session.userId);
+        const { search } = req.query
         const { userId, userName, userIp} = req.session
-        
-        Post.findAll({
+        let option = {
             include: [{
                 model: Tag,
                 attributes: ['id', 'name']
@@ -78,10 +80,33 @@ class Controller {
                 attributes: ['comment', 'reaction', 'id']
             }
         ]
-        })
+        }
+        
+        if (search) {
+            option = {
+                where : {
+                    title : {
+                        [Op.iLike] : `%${search}%`
+                    }
+                },
+                include: [{
+                    model: Tag,
+                    attributes: ['id', 'name']
+                },
+                {
+                    model: Post_Tag,
+                    // where: {
+                    //     UserId : userId
+                    // },
+                    attributes: ['comment', 'reaction', 'id']
+                }
+            ]
+            }
+        }
+        Post.findAll(option)
         .then((data) => {
             // console.log(userName);
-            res.render('home', {data, userName, userIp, userId})
+            res.render('home', {data, userName, userIp, userId, publishSince})
             // res.send(data)
         })
         .catch((err) => {
