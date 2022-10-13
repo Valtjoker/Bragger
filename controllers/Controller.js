@@ -54,6 +54,9 @@ class Controller {
         const { userName, email, password } = req.body
 
         User.create({ userName, password, email })
+            .then((data)=>{
+                UserDetail.create({UserId:data.id})
+            })
             .then((data) => {
                 res.redirect('/login')
             })
@@ -135,7 +138,7 @@ class Controller {
         const {userId} = req.params
         const{title,contentURL,description, tagNames} = req.body
         let hashtags = tagNames.split(' ')
-        let tags = []
+        let tags = [] 
 
         hashtags.forEach(e=>{
             Tag.findOrCreate({
