@@ -162,13 +162,13 @@ class Controller {
         .then(()=>{
             res.redirect("/home")
         })
-        .catch((err) => {
-            if (err.name == "SequelizeValidationError") {
-                err = err.errors.map(el => el.message)
-            }
-            // res.send(err)
-            res.redirect(`/add/${userId}?error=${err}`)
-        })
+        // .catch((err) => {
+        //     if (err.name == "SequelizeValidationError") {
+        //         err = err.errors.map(el => el.message)
+        //     }
+        //     // res.send(err)
+        //     res.redirect(`/add/${userId}?error=${err}`)
+        // })
     }
     
     // ! Done
@@ -274,6 +274,24 @@ class Controller {
             } else {
                 res.redirect('/login')
             }
+        })
+    }
+
+    // ! Add Comment
+    static addComment (req,res) {
+        const { userId, userName, userIp} = req.session
+        const { comment } = req.body
+        // console.log(req.params);
+        const { PostId } = req.params
+        // console.log(req.body);
+
+        Post_Tag.create({UserId : userId, PostId, comment})
+        .then((data) => {
+            res.redirect('/home')
+        })
+        .catch((err) => {
+            console.log(err);
+            res.send(err)
         })
     }
 }

@@ -9,6 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+     get titlePost() {
+      return this.title
+    }
+
+    showType() {
+      let checkURL = this.contentURL.includes('youtube')
+      if (checkURL) {
+        return "Video"
+      } else {
+        return "Image"
+      }
+    }
+
     static associate(models) {
       // define association here
       Post.hasMany(models.Post_Tag)
@@ -19,33 +32,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Post.init({
-    title: {
-      type : DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: { msg: 'Title cant be null' },
-        notEmpty: { msg: 'Title cant be Empty' },
-      }
-    },
-    contentURL: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: { msg: 'contentURL cant be null' },
-        notEmpty: { msg: 'contentURL cant be Empty' },
-      }
-    },
-    type: {
-      type: DataTypes.STRING,
-    },
-    description: {
-      type : DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notNull: { msg: 'description cant be null' },
-        notEmpty: { msg: 'description cant be Empty' },
-      }
-    }
+    title: DataTypes.STRING,
+    contentURL: DataTypes.STRING,
+    type: DataTypes.STRING,
+    description: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Post',

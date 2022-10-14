@@ -33,6 +33,7 @@ router.get('/:userId', Controller.displayProfile)
 router.post('/:userId', Controller.editProfile)
 // router.post('/:userId/generateDetail', Controller.addDetailProfile)
 router.get('/:userId/:postId/delete', Controller.deletePost)
+router.post('/:PostId/comment', Controller.addComment)
 
 
 
