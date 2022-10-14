@@ -40,6 +40,10 @@
                                 <p>Comment : <%= el.comment %>
                                 </p>
                                 <% }) %>
+                                <form action="/<%= el.id %>/comment" method="post">
+                                    <input type="text" name="comment" id="">
+                                    <input type="submit" value="Send Comment">
+                                </form>
                                     <a href="/<%= userId %>/<%= el.id %>/delete"><button>Delete Post Title <%= el.title
                                                 %> </button></a>
                                     <% }) %>
