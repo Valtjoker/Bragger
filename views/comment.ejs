@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <title>Add post</title>
+    <title>Document</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-light">
@@ -33,19 +33,10 @@
           </div>
         </div>
       </nav>
-    <h1>add post!</h1>
-    <% if (errors){%> 
-		<% errors = errors.split(',') %> 
-		<% errors.forEach (el => { %>
-        <p style="color: red;"><%= el %> </p>
-    <% }) %> 
-	<% } %>
-    <form method="post">
-        <label for="">Title</label><input type="text" name="title">
-        <label for="">content Url</label><input type="text" name="contentURL">
-        <label for="">description</label><textarea name="description" id="" cols="30" rows="10"></textarea>
-        <label for="">hashtags</label><input type="text" name="tagNames">
-        <button type="submit">Brag it now!</button>
+    <h1>Comment!</h1>
+    <form action="" method="post">
+        <input type="text" name="comment">
+        <button type="submit">submit</button>
     </form>
 </body>
 </html>

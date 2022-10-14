@@ -38,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Post_Tag',
   });
   Post_Tag.beforeCreate((data) => {
-    data.comment = ""
     data.reaction = 0
   })
   return Post_Tag;
