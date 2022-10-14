@@ -8,6 +8,28 @@
     <title>Document</title>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/home">Bragger</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a href="/<%= userId %> " class="nav-link active" aria-current="page">Your Profile Detail</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
+            </ul>
+            <form action="/home" method="get" class="d-flex">
+                <input class="form-control me-2" type="text" name="search" id="" placeholder="Search By Title">
+                <input type="submit" value="Search" class="btn btn-outline-success">
+            </form>
+          </div>
+        </div>
+      </nav>
     <a href="/logout">Logout</a>
     <a href="/home "><button>Home</button></a>
     <h2>Your Profile Detail</h2>

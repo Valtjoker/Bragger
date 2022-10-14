@@ -125,8 +125,9 @@ class Controller {
 
     static commentForm(req,res){
         let {PostId} = req.params
+        const {userId}= req.session
         Post_Tag.findOne({where:{PostId}})
-        .then((data)=>{res.render('comment', {data})})
+        .then((data)=>{res.render('comment', {data, userId})})
         .catch(err=>{res.send(err)})
     }
 
@@ -145,7 +146,7 @@ class Controller {
         let errors = req.query.error
         const {userId} = req.params
         User.findOne({where:{id:userId}})
-        .then((data)=>{res.render('add', {data, errors})})
+        .then((data)=>{res.render('add', {data, errors, userId})})
         .catch(err=>{res.send(err)})
     }
 
@@ -171,7 +172,7 @@ class Controller {
             console.log(tags);
             if(tags.length > 0){
                 tags.forEach(e=>{
-                    Post_Tag.create({PostId:data.id, TagId:e.id, UserId:userId})
+                    Post_Tag.create({PostId:data.id, TagId:e.id, UserId:userId, comment:""})
                 })
             }
         })
