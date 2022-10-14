@@ -9,6 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+     get titlePost() {
+      return this.title
+    }
+
+    showType() {
+      let checkURL = this.contentURL.includes('youtube')
+      if (checkURL) {
+        return "Video"
+      } else {
+        return "Image"
+      }
+    }
+
     static associate(models) {
       // define association here
       Post.hasMany(models.Post_Tag)

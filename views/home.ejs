@@ -20,7 +20,8 @@
     </form>
 
     <% data.forEach((el)=> { %>
-        <h2>Title : <%= el.title %></h2>
+        <h2>Title : <%= el.titlePost %></h2>
+        <h3>Post Type :  <%= el.showType() %></h3>
         <h3>Publish <%= publishSince(el.createdAt) %> </h3>
         <% if (el.contentURL.slice(12, 19)=='youtube' ) { %>
             <iframe width="560" height="315" src="<%= el.contentURL %> " title="YouTube video player" frameborder="0"
